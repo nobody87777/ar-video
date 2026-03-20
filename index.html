@@ -3,7 +3,6 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- MindAR + A-Frame -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
 </head>
@@ -11,20 +10,18 @@
 <body style="margin:0; overflow:hidden;">
 
   <!-- START BUTTON -->
-  <button onclick="startAR()" 
+  <button id="startBtn"
     style="position:absolute; z-index:10; top:20px; left:20px; padding:10px; font-size:16px;">
     Start AR
   </button>
 
   <a-scene
-    mindar-image="imageTargetSrc: targets.mind;"
+    mindar-image="imageTargetSrc: targets.mind; autoStart: false;"
     embedded
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: true"
-    loading-screen="enabled: false"
   >
 
-    <!-- Assets -->
     <a-assets>
       <video 
         id="vid" 
@@ -32,43 +29,33 @@
         preload="auto" 
         loop 
         muted 
-        playsinline 
-        crossorigin="anonymous">
+        playsinline>
       </video>
     </a-assets>
 
-    <!-- Camera -->
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- Image Target -->
     <a-entity mindar-image-target="targetIndex: 0">
-
-      <!-- VIDEO INSIDE IMAGE -->
-      <a-video
-        src="#vid"
-        width="1"
-        height="0.6"
-        position="0 0 0">
-      </a-video>
-
+      <a-video src="#vid" width="1" height="0.6" position="0 0 0"></a-video>
     </a-entity>
 
   </a-scene>
 
-  <!-- Script -->
   <script>
-    const scene = document.querySelector("a-scene");
+    const startBtn = document.querySelector("#startBtn");
+    const sceneEl = document.querySelector("a-scene");
     const video = document.querySelector("#vid");
 
-    function startAR() {
-      scene.components["mindar-image-system"].start();
-    }
+    startBtn.addEventListener("click", async () => {
+      await sceneEl.systems["mindar-image-system"].start();
+      startBtn.style.display = "none";
+    });
 
-    scene.addEventListener("targetFound", () => {
+    sceneEl.addEventListener("targetFound", () => {
       video.play();
     });
 
-    scene.addEventListener("targetLost", () => {
+    sceneEl.addEventListener("targetLost", () => {
       video.pause();
     });
   </script>
