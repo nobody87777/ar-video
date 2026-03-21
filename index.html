@@ -13,83 +13,77 @@
     }
   </style>
 
-  <!-- A-Frame -->
   <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-
-  <!-- MindAR -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
 </head>
 
 <body>
 
-  <!-- START BUTTON -->
-  <button id="startBtn"
-    style="position:fixed; z-index:9999; top:20px; left:20px; padding:12px 16px; font-size:18px; background:white; border:2px solid black;">
-    Start AR
-  </button>
+<button id="startBtn"
+  style="position:fixed; z-index:9999; top:20px; left:20px; padding:12px; font-size:18px;">
+  Start AR
+</button>
 
-  <a-scene
-    id="scene"
-    mindar-image="imageTargetSrc: targets.mind; autoStart: false;"
-    embedded
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: true"
-    style="position:fixed; top:0; left:0; width:100%; height:100%;">
-    
-    <!-- Assets -->
-    <a-assets>
-      <video 
-        id="vid" 
-        src="video.mp4" 
-        autoplay 
-        loop 
-        muted 
-        playsinline>
-      </video>
-    </a-assets>
+<a-scene
+  id="scene"
+  mindar-image="imageTargetSrc: targets.mind; autoStart: false;"
+  embedded
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: true"
+  style="position:fixed; top:0; left:0; width:100%; height:100%;">
 
-    <!-- Camera -->
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+  <a-assets>
+    <video 
+      id="vid"
+      src="video.mp4"
+      autoplay
+      loop
+      muted
+      playsinline>
+    </video>
+  </a-assets>
 
-    <!-- 🔥 PERFECT FIT VIDEO -->
-    <a-entity mindar-image-target="targetIndex: 0">
-      <a-video
-        src="#vid"
-        width="2.4"
-        height="1.35"
-        position="0 0 0.01">
-      </a-video>
-    </a-entity>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  </a-scene>
+  <!-- 🔥 FIXED: STICKS TO IMAGE -->
+  <a-entity mindar-image-target="targetIndex: 0">
+    <a-video
+      src="#vid"
+      width="2.2"
+      height="1.65"
+      position="0 0 0.001">
+    </a-video>
+  </a-entity>
 
-  <script>
-    const startBtn = document.querySelector("#startBtn");
-    const sceneEl = document.querySelector("#scene");
-    const video = document.querySelector("#vid");
+</a-scene>
 
-    startBtn.addEventListener("click", async () => {
-      if (sceneEl.hasLoaded) {
-        startAR();
-      } else {
-        sceneEl.addEventListener("loaded", startAR);
-      }
-    });
+<script>
+const startBtn = document.querySelector("#startBtn");
+const sceneEl = document.querySelector("#scene");
+const video = document.querySelector("#vid");
 
-    async function startAR() {
-      const mindarSystem = sceneEl.systems["mindar-image-system"];
-      await mindarSystem.start();
-      startBtn.style.display = "none";
-    }
+startBtn.addEventListener("click", async () => {
+  if (sceneEl.hasLoaded) {
+    startAR();
+  } else {
+    sceneEl.addEventListener("loaded", startAR);
+  }
+});
 
-    sceneEl.addEventListener("targetFound", () => {
-      video.play();
-    });
+async function startAR() {
+  const mindarSystem = sceneEl.systems["mindar-image-system"];
+  await mindarSystem.start();
+  startBtn.style.display = "none";
+}
 
-    sceneEl.addEventListener("targetLost", () => {
-      video.pause();
-    });
-  </script>
+sceneEl.addEventListener("targetFound", () => {
+  video.play();
+});
+
+sceneEl.addEventListener("targetLost", () => {
+  video.pause();
+});
+</script>
 
 </body>
 </html>
