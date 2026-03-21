@@ -11,6 +11,22 @@
       height: 100%;
       width: 100%;
     }
+
+    /* FULL SCREEN TAP OVERLAY */
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      z-index: 9999;
+    }
   </style>
 
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
@@ -19,11 +35,12 @@
 
 <body>
 
+<!-- 🔥 TAP SCREEN -->
+<div id="overlay">Tap to Start AR</div>
+
 <a-scene
   id="scene"
   mindar-image="imageTargetSrc: targets.mind; autoStart: false;"
-  color-space="sRGB"
-  renderer="colorManagement: true, physicallyCorrectLights"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: true"
   style="position:fixed; top:0; left:0; width:100%; height:100%;">
@@ -35,14 +52,12 @@
       autoplay
       loop
       muted
-      playsinline
-      webkit-playsinline>
+      playsinline>
     </video>
   </a-assets>
 
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <!-- 🔥 PERFECT AR -->
   <a-entity mindar-image-target="targetIndex: 0">
     <a-plane
       material="shader: flat; src: #vid"
@@ -55,12 +70,14 @@
 </a-scene>
 
 <script>
+const overlay = document.querySelector("#overlay");
 const scene = document.querySelector("#scene");
 const video = document.querySelector("#vid");
 
-window.addEventListener("load", async () => {
+overlay.addEventListener("click", async () => {
   const mindar = scene.systems["mindar-image-system"];
-  await mindar.start();   // 🔥 AUTO START
+  await mindar.start();
+  overlay.style.display = "none";
 });
 
 scene.addEventListener("targetFound", () => {
