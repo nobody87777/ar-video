@@ -3,7 +3,6 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- FULL SCREEN FIX -->
   <style>
     html, body {
       margin: 0;
@@ -29,7 +28,6 @@
     Start AR
   </button>
 
-  <!-- AR SCENE -->
   <a-scene
     id="scene"
     mindar-image="imageTargetSrc: targets.mind; autoStart: false;"
@@ -38,7 +36,6 @@
     device-orientation-permission-ui="enabled: true"
     style="position:fixed; top:0; left:0; width:100%; height:100%;">
     
-    <!-- Assets -->
     <a-assets>
       <video 
         id="vid" 
@@ -50,25 +47,20 @@
       </video>
     </a-assets>
 
-    <!-- Camera -->
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- Image Target -->
+    <!-- 🔥 PERFECT EDGE-TO-EDGE VIDEO -->
     <a-entity mindar-image-target="targetIndex: 0">
-
-      <!-- VIDEO -->
       <a-video
         src="#vid"
-        width="1.5"
-        height="1"
-        position="0 0 0.1">
+        width="3"
+        height="1.6875"
+        position="0 0 0.2">
       </a-video>
-
     </a-entity>
 
   </a-scene>
 
-  <!-- SCRIPT -->
   <script>
     const startBtn = document.querySelector("#startBtn");
     const sceneEl = document.querySelector("#scene");
