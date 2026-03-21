@@ -12,7 +12,6 @@
       width: 100%;
     }
 
-    /* FULL SCREEN TAP OVERLAY */
     #overlay {
       position: fixed;
       top: 0;
@@ -35,7 +34,6 @@
 
 <body>
 
-<!-- 🔥 TAP SCREEN -->
 <div id="overlay">Tap to Start AR</div>
 
 <a-scene
@@ -74,12 +72,24 @@ const overlay = document.querySelector("#overlay");
 const scene = document.querySelector("#scene");
 const video = document.querySelector("#vid");
 
-overlay.addEventListener("click", async () => {
+overlay.addEventListener("click", () => {
+  
+  // Wait until scene is fully loaded
+  if (scene.hasLoaded) {
+    startAR();
+  } else {
+    scene.addEventListener("loaded", startAR);
+  }
+
+});
+
+async function startAR() {
   const mindar = scene.systems["mindar-image-system"];
   await mindar.start();
   overlay.style.display = "none";
-});
+}
 
+// Video controls
 scene.addEventListener("targetFound", () => {
   video.play();
 });
