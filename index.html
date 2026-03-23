@@ -41,6 +41,7 @@
   mindar-image="imageTargetSrc: targets.mind; autoStart: false;"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: true"
+  renderer="colorManagement: true, physicallyCorrectLights"
   style="position:fixed; top:0; left:0; width:100%; height:100%;">
 
   <a-assets>
@@ -49,18 +50,19 @@
       src="video.mp4"
       autoplay
       loop
-      muted
-      playsinline>
+      playsinline
+      webkit-playsinline>
     </video>
   </a-assets>
 
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+  <!-- 🔥 PERFECT LANDSCAPE FIT -->
   <a-entity mindar-image-target="targetIndex: 0">
     <a-plane
       material="shader: flat; src: #vid"
-      width="1"
-      height="0.75"
+      width="1.6"
+      height="0.9"
       position="0 0 0">
     </a-plane>
   </a-entity>
@@ -73,8 +75,7 @@ const scene = document.querySelector("#scene");
 const video = document.querySelector("#vid");
 
 overlay.addEventListener("click", () => {
-  
-  // Wait until scene is fully loaded
+
   if (scene.hasLoaded) {
     startAR();
   } else {
@@ -86,14 +87,21 @@ overlay.addEventListener("click", () => {
 async function startAR() {
   const mindar = scene.systems["mindar-image-system"];
   await mindar.start();
+
   overlay.style.display = "none";
+
+  // 🔊 Enable sound after user interaction
+  video.muted = false;
+  video.volume = 1;
 }
 
-// Video controls
+// Play video when image found
 scene.addEventListener("targetFound", () => {
+  video.muted = false;
   video.play();
 });
 
+// Pause when lost
 scene.addEventListener("targetLost", () => {
   video.pause();
 });
